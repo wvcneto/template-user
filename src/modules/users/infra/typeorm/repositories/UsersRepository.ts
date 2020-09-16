@@ -8,11 +8,11 @@ class UsersRepository {
     this.users = [];
   }
 
-  public index(): User[] {
+  public async index(): Promise<User[]> {
     return this.users;
   }
 
-  public create({ name, email }: ICreateUserDTO): User {
+  public async create({ name, email }: ICreateUserDTO): Promise<User> {
     const user = new User({ name, email });
 
     this.users.push(user);
@@ -20,7 +20,7 @@ class UsersRepository {
     return user;
   }
 
-  public findByEmail(email: string): User | undefined {
+  public async findByEmail(email: string): Promise<User | undefined> {
     const findUser = this.users.find(user => user.email === email);
 
     return findUser || undefined;

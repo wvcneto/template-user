@@ -1,26 +1,23 @@
 import { Response, Request } from 'express';
 
-import UsersRepository from '@modules/users/infra/typeorm/repositories/UsersRepository';
-
-const usersRepository = new UsersRepository();
+import CreateUserService from '@modules/users/services/CreateUserService';
+import IndexUsersService from '@modules/users/services/IndexUsersService';
 
 export default class UsersController {
   public async index(request: Request, response: Response): Promise<Response> {
-    const users = usersRepository.index();
+    const indexUsers = new IndexUsersService();
 
-    return response.json(users);
+    const users = indexUsers.execute();
+
+    return response.status(200).json(users);
   }
 
   public async create(request: Request, response: Response): Promise<Response> {
     const { name, email } = request.body;
 
-    const userExists = usersRepository.findByEmail(email);
+    const createUser = new CreateUserService();
 
-    if (userExists) {
-      return response.json({ message: 'User already exists.' });
-    }
-
-    const user = usersRepository.create({
+    const user = await createUser.execute({
       name,
       email,
     });
