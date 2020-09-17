@@ -1,23 +1,25 @@
-import User from '@modules/users/infra/typeorm/entities/User';
+import { getCustomRepository } from 'typeorm';
 import UsersRepository from '@modules/users/infra/typeorm/repositories/UsersRepository';
-import ICreateUserDTO from '@modules/users/dtos/ICreateUserDTO';
 import AppError from '@shared/errors/AppError';
 
+import User from '../infra/typeorm/entities/User';
+
+interface IRequest {
+  name: string;
+  email: string;
+}
+
 class CreateUserService {
-  private usersRepository: UsersRepository;
+  public async execute({ name, email }: IRequest): Promise<User> {
+    const usersRepository = getCustomRepository(UsersRepository);
 
-  constructor(usersRepository: UsersRepository) {
-    this.usersRepository = usersRepository;
-  }
+    const checkUsersExists = await usersRepository.findByEmail(email);
 
-  public async execute({ name, email }: ICreateUserDTO): Promise<User> {
-    const userExists = await this.usersRepository.findByEmail(email);
-
-    if (userExists) {
-      throw new AppError('User already exists.', 409);
+    if (checkUsersExists) {
+      throw new AppError('Email already used.');
     }
 
-    const user = await this.usersRepository.create({
+    const user = await usersRepository.create({
       name,
       email,
     });

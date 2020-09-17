@@ -1,13 +1,13 @@
 import { Response, Request } from 'express';
-
 import UsersRepository from '@modules/users/infra/typeorm/repositories/UsersRepository';
+import { getCustomRepository } from 'typeorm';
 import CreateUserService from '@modules/users/services/CreateUserService';
-
-const usersRepository = new UsersRepository();
 
 export default class UsersController {
   public async index(request: Request, response: Response): Promise<Response> {
-    const users = await usersRepository.index();
+    const usersRepository = getCustomRepository(UsersRepository);
+
+    const users = await usersRepository.findAllUsers();
 
     return response.status(200).json(users);
   }
@@ -15,7 +15,7 @@ export default class UsersController {
   public async create(request: Request, response: Response): Promise<Response> {
     const { name, email } = request.body;
 
-    const createUser = new CreateUserService(usersRepository);
+    const createUser = new CreateUserService();
 
     const user = await createUser.execute({
       name,
