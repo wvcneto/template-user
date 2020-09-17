@@ -2,7 +2,6 @@ import { getRepository, Repository, EntityRepository } from 'typeorm';
 
 import IUsersRepository from '@modules/users/repositories/IUsersRepository';
 import ICreateUserDTO from '@modules/users/dtos/ICreateUserDTO';
-// import IFindAllUsersDTO from '@modules/users/dtos/IFindAllUsersDTO';
 import User from '../entities/User';
 
 @EntityRepository(User)
@@ -13,8 +12,12 @@ class UsersRepository implements IUsersRepository {
     this.ormRepository = getRepository(User);
   }
 
-  public async create({ name, email }: ICreateUserDTO): Promise<User> {
-    const user = this.ormRepository.create({ name, email });
+  public async create({
+    name,
+    email,
+    password,
+  }: ICreateUserDTO): Promise<User> {
+    const user = this.ormRepository.create({ name, email, password });
 
     await this.ormRepository.save(user);
 
