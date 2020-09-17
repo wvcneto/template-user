@@ -3,17 +3,21 @@ import UsersRepository from '@modules/users/infra/typeorm/repositories/UsersRepo
 import ICreateUserDTO from '@modules/users/dtos/ICreateUserDTO';
 import AppError from '@shared/errors/AppError';
 
-const usersRepository = new UsersRepository();
-
 class CreateUserService {
+  private usersRepository: UsersRepository;
+
+  constructor(usersRepository: UsersRepository) {
+    this.usersRepository = usersRepository;
+  }
+
   public async execute({ name, email }: ICreateUserDTO): Promise<User> {
-    const userExists = await usersRepository.findByEmail(email);
+    const userExists = await this.usersRepository.findByEmail(email);
 
     if (userExists) {
       throw new AppError('User already exists.', 409);
     }
 
-    const user = await usersRepository.create({
+    const user = await this.usersRepository.create({
       name,
       email,
     });

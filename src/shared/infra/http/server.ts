@@ -6,6 +6,8 @@ import 'express-async-errors';
 import routes from '@shared/infra/http/routes';
 import AppError from '@shared/errors/AppError';
 
+import '@shared/infra/typeorm';
+
 const app = express();
 
 app.use(cors());
@@ -22,6 +24,7 @@ app.use((err: Error, request: Request, response: Response, _: NextFunction) => {
     });
   }
 
+  // eslint-disable-next-line no-console
   console.error(err);
 
   return response.status(500).json({
