@@ -25,13 +25,13 @@ class AuthenticateUserService {
     const user = await usersRepository.findByEmail(email);
 
     if (!user) {
-      throw new AppError('Email or Password Incorrect', 400);
+      throw new AppError('Email or Password Incorrect', 401);
     }
 
     const passwordMatched = await compare(password, user.password);
 
     if (!passwordMatched) {
-      throw new AppError('Email or Password Incorrect', 400);
+      throw new AppError('Email or Password Incorrect', 401);
     }
 
     const token = sign({}, authConfig.jwt.secret, {
