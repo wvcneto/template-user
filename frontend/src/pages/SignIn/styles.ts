@@ -13,7 +13,7 @@ export const Content = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background: #80728b;
+  background: #90829b;
   border-radius: 12px;
   width: 100%;
   height: 95%;
