@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 import { shade } from 'polished';
 
 export const Container = styled.div`
@@ -6,6 +6,18 @@ export const Container = styled.div`
 
   display: flex;
   align-items: stretch;
+  margin-b
+`;
+
+const apperFromTop = keyframes`
+  from {
+    opacity: 0;
+    transform: translateY(-50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 `;
 
 export const Content = styled.div`
@@ -13,12 +25,25 @@ export const Content = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background: #90829b;
   border-radius: 12px;
   width: 100%;
   height: 95%;
   margin: auto;
   max-width: 600px;
+
+  background: rgb(76, 76, 164);
+  background: linear-gradient(
+    0deg,
+    rgba(76, 76, 164, 1) 0%,
+    rgba(72, 216, 216, 1) 100%
+  );
+
+  /* Animation */
+  animation: ${apperFromTop} 1.5s;
+
+  img {
+    height: 140px;
+  }
 
   form {
     margin: 80px 0;
@@ -43,7 +68,7 @@ export const Content = styled.div`
   }
 
   > a {
-    color: #fcfcfa;
+    color: #34d4d8;
     display: block;
     margin-bottom: 8px;
     text-decoration: none;
@@ -57,7 +82,7 @@ export const Content = styled.div`
     }
 
     &:hover {
-      color: ${shade(0.2, '#fcfcfa')};
+      color: ${shade(0.2, '#34d4d8')};
     }
   }
 `;
