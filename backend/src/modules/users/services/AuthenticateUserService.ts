@@ -1,7 +1,6 @@
-import UsersRepository from '@modules/users/infra/typeorm/repositories/UsersRepository';
+import IUsersRepository from '@modules/users/repositories/IUsersRepository';
 import AppError from '@shared/errors/AppError';
 import { compare } from 'bcryptjs';
-import { getCustomRepository } from 'typeorm';
 import { sign } from 'jsonwebtoken';
 
 import authConfig from '@modules/../config/auth';
@@ -19,10 +18,10 @@ interface IResponse {
 }
 
 class AuthenticateUserService {
-  public async execute({ email, password }: IRequest): Promise<IResponse> {
-    const usersRepository = getCustomRepository(UsersRepository);
+  constructor(private usersRepository: IUsersRepository) {}
 
-    const user = await usersRepository.findByEmail(email);
+  public async execute({ email, password }: IRequest): Promise<IResponse> {
+    const user = await this.usersRepository.findByEmail(email);
 
     if (!user) {
       throw new AppError('Email or Password Incorrect', 401);
